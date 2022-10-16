@@ -1,11 +1,13 @@
 # Importing essential libraries
-from flask import Flask, render_template, request
+from flask import Flask,abort, render_template, request
 import pickle
 import numpy as np
 
 # Load the Random Forest CLassifier model
 filename = 'first-innings-score-ri-model.pkl'
 ridge_regressor = pickle.load(open(filename, 'rb'))
+if filename is None:
+        abort(400)
 
 app = Flask(__name__,template_folder='template')
 
@@ -131,7 +133,7 @@ def predict():
         data = np.array([temp_array])
         my_prediction = int(ridge_regressor.predict(data)[0])
               
-        return render_template('index.html', lower_limit = my_prediction-10, upper_limit = my_prediction+5)
+        return render_template('index.html', lower_limit = my_prediction-5, upper_limit = my_prediction+5)
 
 
 
